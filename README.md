@@ -24,9 +24,10 @@ git clone https://github.com/SEU-USUARIO/xcloud-linux-gamepad-fix.git
 cd xcloud-linux-gamepad-fix
 ```
 
-3. Dê permissão ao instalador:
+3. Dê permissão aos scripts:
 ```bash
 chmod +x install.sh
+chmod +x uninstall.sh
 chmod +x xcloud-gamepad.sh
 ```
 
@@ -36,6 +37,17 @@ sudo ./install.sh
 ```
 
 Após isso, basta conectar o controle e jogar. O serviço iniciará e encerrará automaticamente junto com o hardware.
+
+## Como Desinstalar
+
+Caso tenha utilizado a instalação automática e queira remover o projeto do sistema:
+
+Execute o script de desinstalação como root:
+```bash
+sudo ./uninstall.sh
+```
+
+Isso removerá o serviço do systemd, a regra do udev e o executável local, limpando completamente as alterações feitas no sistema operacional.
 
 ## Como Usar (Modo Manual)
 Caso não queira criar um serviço no sistema e prefira rodar apenas quando for jogar:
@@ -50,3 +62,8 @@ chmod +x xcloud-gamepad.sh
 ```
 
 Mantenha o terminal aberto enquanto joga. Pressione Ctrl + C para encerrar a emulação.
+
+## Licença
+
+Este projeto está sob a licença MIT. Consulte o arquivo LICENSE para obter os termos detalhados.
+
