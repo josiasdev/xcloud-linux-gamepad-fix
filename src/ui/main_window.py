@@ -1,7 +1,8 @@
 """Main application window with three tabs: Emulation, Profiles, Test."""
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, GLib
+from gi.repository import Gtk, GLib, Gdk
+from typing import Optional, List, Any
 
 from src.config.profile_repository import ProfileRepository
 from src.core.emulation import EmulationService
@@ -17,7 +18,7 @@ log = get_logger(__name__)
 
 class MainWindow(Gtk.Window):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(title="XCloud Gamepad Fixer")
         self.set_default_size(640, 460)
         self.set_border_width(0)
@@ -29,7 +30,7 @@ class MainWindow(Gtk.Window):
         # ── Services ──────────────────────────────────────────────────
         self._repo      = ProfileRepository()
         self._emulation = EmulationService()
-        self._devices: list[InputDevice] = []
+        self._devices: List[InputDevice] = []
 
         # ── Notebook (tabs) ───────────────────────────────────────────
         notebook = Gtk.Notebook()
@@ -114,7 +115,7 @@ class MainWindow(Gtk.Window):
     # Device handling
     # ==================================================================
 
-    def _refresh_devices(self):
+    def _refresh_devices(self) -> None:
         self._device_combo.remove_all()
         self._devices = list_controllers()
         log.debug("Detected %d controller(s)", len(self._devices))
@@ -132,10 +133,10 @@ class MainWindow(Gtk.Window):
         self._on_device_changed(self._device_combo)
         self._refresh_profile_combo()
 
-    def _on_device_changed(self, _combo):
+    def _on_device_changed(self, _combo: Gtk.ComboBoxText) -> None:
         self._test_tab.set_device(self._selected_device())
 
-    def _selected_device(self) -> InputDevice | None:
+    def _selected_device(self) -> Optional[InputDevice]:
         idx = self._device_combo.get_active()
         if idx < 0 or idx >= len(self._devices):
             return None
@@ -145,14 +146,14 @@ class MainWindow(Gtk.Window):
     # Profile handling
     # ==================================================================
 
-    def _refresh_profile_combo(self):
+    def _refresh_profile_combo(self) -> None:
         self._profile_combo.remove_all()
         for p in self._repo.all():
             self._profile_combo.append_text(p.name)
         if self._profile_combo.get_model() and len(self._profile_combo.get_model()):
             self._profile_combo.set_active(0)
 
-    def _selected_profile(self) -> Profile | None:
+    def _selected_profile(self) -> Optional[Profile]:
         idx = self._profile_combo.get_active()
         profiles = self._repo.all()
         if idx < 0 or idx >= len(profiles):
@@ -160,17 +161,17 @@ class MainWindow(Gtk.Window):
         return profiles[idx]
 
     # ==================================================================
-    # Emulation toggle (called by button AND tray menu)
+    # Emulation toggle
     # ==================================================================
 
-    def _on_toggle_emulation(self):
+    def _on_toggle_emulation(self) -> None:
         if self._emulation.is_running:
             self._stop_emulation()
         else:
             self._start_emulation()
         self._tray.update_emulation_item()
 
-    def _start_emulation(self):
+    def _start_emulation(self) -> None:
         device  = self._selected_device()
         profile = self._selected_profile()
         if not device or not profile:
@@ -189,7 +190,7 @@ class MainWindow(Gtk.Window):
             log.error("Failed to start emulation: %s", exc)
             self._status_lbl.set_text(f"Erro: {exc}")
 
-    def _stop_emulation(self):
+    def _stop_emulation(self) -> None:
         self._emulation.stop()
         self._toggle_btn.set_label("Iniciar Emulação")
         self._refresh_btn.set_sensitive(True)
@@ -201,7 +202,7 @@ class MainWindow(Gtk.Window):
     # Window / tray lifecycle
     # ==================================================================
 
-    def _on_delete_event(self, _win, _event) -> bool:
+    def _on_delete_event(self, _win: Gtk.Window, _event: Any) -> bool:
         """Hide to tray instead of destroying the window."""
         self.hide()
         log.info("Window hidden to tray")

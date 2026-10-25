@@ -62,7 +62,7 @@ class EmulationService:
     # ------------------------------------------------------------------
 
     @staticmethod
-    def _auth_cmd():
+    def _auth_cmd() -> List[str]:
         if shutil.which("pkexec"):
             return ["pkexec"]
         return ["sudo"]

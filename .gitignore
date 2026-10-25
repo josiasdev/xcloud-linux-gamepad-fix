@@ -4,3 +4,6 @@ __pycache__/
 *.deb
 packaging/build/
 dist/
+.venv/
+.mypy_cache/
+.ruff_cache/

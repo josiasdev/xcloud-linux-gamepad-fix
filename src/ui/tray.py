@@ -45,6 +45,7 @@ class TrayIcon:
         self._on_toggle_emulation = on_toggle_emulation
 
         self._menu = self._build_menu()
+        self.update_emulation_item()
 
         if _INDICATOR_AVAILABLE:
             log.info("Tray: using AppIndicator3")

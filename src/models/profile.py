@@ -1,17 +1,15 @@
 """Data classes for gamepad profiles and devices."""
-from dataclasses import dataclass, field
-from typing import List, Optional
-
+from dataclasses import dataclass
+from typing import Any, Dict, List
 
 @dataclass
 class Profile:
-    """Represents a controller mapping profile."""
     name: str
-    absmap: str  # xboxdrv --evdev-absmap value
-    keymap: str  # xboxdrv --evdev-keymap value
-    axismap: str = "-y1=y1,-y2=y2"  # xboxdrv --axismap value
+    absmap: str
+    keymap: str
+    axismap: str = "-y1=y1,-y2=y2"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict[str, str]:
         return {
             "name": self.name,
             "absmap": self.absmap,
@@ -20,7 +18,7 @@ class Profile:
         }
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Profile":
+    def from_dict(cls, data: Dict[str, str]) -> "Profile":
         return cls(
             name=data["name"],
             absmap=data["absmap"],
@@ -29,8 +27,7 @@ class Profile:
         )
 
     def to_xboxdrv_args(self) -> List[str]:
-        """Build the xboxdrv argument list for this profile."""
-        args = [
+        args: List[str] = [
             "--evdev-absmap", self.absmap,
             "--evdev-keymap", self.keymap,
         ]
@@ -42,11 +39,10 @@ class Profile:
 
 @dataclass
 class InputDevice:
-    """Represents a detected input device."""
     name: str
-    event_path: str          # e.g. /dev/input/event20
-    vendor_id: str = ""      # e.g. 054c
-    product_id: str = ""     # e.g. 05c4
+    event_path: str
+    vendor_id: str = ""
+    product_id: str = ""
 
     @property
     def display_name(self) -> str:
@@ -57,7 +53,7 @@ class InputDevice:
         return self.vendor_id.lower() == "054c"
 
 
-DEFAULT_PROFILES: List[dict] = [
+DEFAULT_PROFILES: List[Dict[str, str]] = [
     {
         "name": "Sony DualShock 4 / DualSense (USB/Bluetooth)",
         "absmap": "ABS_X=x1,ABS_Y=y1,ABS_RX=x2,ABS_RY=y2,ABS_Z=lt,ABS_RZ=rt,ABS_HAT0X=dpad_x,ABS_HAT0Y=dpad_y",

@@ -11,7 +11,7 @@ from src.ui.profile_editor import ProfileEditorDialog
 class ProfilesTab(Gtk.Box):
     """VBox containing the profile list and CRUD toolbar."""
 
-    def __init__(self, repo: ProfileRepository):
+    def __init__(self, repo: ProfileRepository) -> None:
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.set_border_width(10)
         self._repo = repo
@@ -70,7 +70,7 @@ class ProfilesTab(Gtk.Box):
     # Callbacks
     # ------------------------------------------------------------------
 
-    def _on_add(self, _btn):
+    def _on_add(self, _btn: Gtk.Button) -> None:
         parent = self.get_toplevel()
         dlg = ProfileEditorDialog(parent, profile=None)
         if dlg.run() == Gtk.ResponseType.OK:
@@ -80,7 +80,7 @@ class ProfilesTab(Gtk.Box):
                 self._refresh()
         dlg.destroy()
 
-    def _on_edit(self, _btn):
+    def _on_edit(self, _btn: Gtk.Button) -> None:
         idx = self.selected_index()
         if idx is None:
             return
@@ -94,7 +94,7 @@ class ProfilesTab(Gtk.Box):
                 self._refresh()
         dlg.destroy()
 
-    def _on_delete(self, _btn):
+    def _on_delete(self, _btn: Gtk.Button) -> None:
         idx = self.selected_index()
         if idx is None:
             return
@@ -113,7 +113,7 @@ class ProfilesTab(Gtk.Box):
 
     # ------------------------------------------------------------------
 
-    def _refresh(self):
+    def _refresh(self) -> None:
         self._store.clear()
         for p in self._repo.all():
             self._store.append([p.name, p.absmap, p.keymap, p.axismap])

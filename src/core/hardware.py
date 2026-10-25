@@ -1,6 +1,7 @@
 """Hardware detection – scans /proc/bus/input/devices for joystick devices."""
 import os
-from typing import List
+import re
+from typing import Dict, List
 
 from src.core.logger import get_logger
 from src.models.profile import InputDevice
@@ -17,7 +18,7 @@ def list_controllers() -> List[InputDevice]:
         return []
 
     devices: List[InputDevice] = []
-    current: dict = {}
+    current: Dict[str, str] = {}
     log.debug("Scanning %s for joystick devices", _PROC_DEVICES)
 
     with open(_PROC_DEVICES, "r") as f:
@@ -50,6 +51,5 @@ def list_controllers() -> List[InputDevice]:
 
 
 def _parse_field(line: str, field: str) -> str:
-    import re
     m = re.search(rf"{field}=([0-9a-fA-F]{{4}})", line)
     return m.group(1) if m else ""
