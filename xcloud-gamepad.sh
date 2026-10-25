@@ -64,6 +64,7 @@ if [[ "${VENDOR_ID,,}" == "054c" ]]; then
       --evdev "$EVENT_PATH" \
       --evdev-absmap ABS_X=x1,ABS_Y=y1,ABS_RX=x2,ABS_RY=y2,ABS_Z=lt,ABS_RZ=rt,ABS_HAT0X=dpad_x,ABS_HAT0Y=dpad_y \
       --evdev-keymap BTN_SOUTH=a,BTN_EAST=b,BTN_WEST=x,BTN_NORTH=y,BTN_TL=lb,BTN_TR=rb,BTN_TL2=lt,BTN_TR2=rt,BTN_SELECT=back,BTN_START=start,BTN_MODE=guide,BTN_THUMBL=tl,BTN_THUMBR=tr \
+      --axismap -y1=y1,-y2=y2 \
       --mimic-xpad \
       --silent
 else
