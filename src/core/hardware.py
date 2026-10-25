@@ -1,7 +1,7 @@
 """Hardware detection – scans /proc/bus/input/devices for joystick devices."""
+
 import os
 import re
-from typing import Dict, List
 
 from src.core.logger import get_logger
 from src.models.profile import InputDevice
@@ -12,16 +12,16 @@ _PROC_DEVICES = "/proc/bus/input/devices"
 _IGNORED_SUFFIXES = ("Motion Sensors", "Touchpad")
 
 
-def list_controllers() -> List[InputDevice]:
+def list_controllers() -> list[InputDevice]:
     """Return all joystick-capable input devices, excluding noise nodes."""
     if not os.path.exists(_PROC_DEVICES):
         return []
 
-    devices: List[InputDevice] = []
-    current: Dict[str, str] = {}
+    devices: list[InputDevice] = []
+    current: dict[str, str] = {}
     log.debug("Scanning %s for joystick devices", _PROC_DEVICES)
 
-    with open(_PROC_DEVICES, "r") as f:
+    with open(_PROC_DEVICES) as f:
         for raw in f:
             line = raw.strip()
 
@@ -38,12 +38,14 @@ def list_controllers() -> List[InputDevice]:
                 ev = next((h for h in handlers if h.startswith("event")), None)
                 name = current.get("name")
                 if name and has_js and ev and not any(name.endswith(s) for s in _IGNORED_SUFFIXES):
-                    devices.append(InputDevice(
-                        name=name,
-                        event_path=f"/dev/input/{ev}",
-                        vendor_id=current.get("vendor", ""),
-                        product_id=current.get("product", ""),
-                    ))
+                    devices.append(
+                        InputDevice(
+                            name=name,
+                            event_path=f"/dev/input/{ev}",
+                            vendor_id=current.get("vendor", ""),
+                            product_id=current.get("product", ""),
+                        )
+                    )
                 elif has_js and ev:
                     log.warning("Skipping device with unexpected format: %s", name)
             elif not line:

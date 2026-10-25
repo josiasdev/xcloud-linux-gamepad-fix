@@ -1,6 +1,7 @@
 """Event monitor – reads raw evdev events in a background thread."""
+
 import threading
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from src.core.logger import get_logger
 
@@ -8,12 +9,13 @@ log = get_logger(__name__)
 
 try:
     import evdev
+
     _EVDEV_AVAILABLE = True
 except ImportError:
     _EVDEV_AVAILABLE = False
 
 
-AxisCallback = Callable[[int, int], None]    # (code, value)
+AxisCallback = Callable[[int, int], None]  # (code, value)
 ButtonCallback = Callable[[int, bool], None]  # (code, is_pressed)
 
 
@@ -32,11 +34,11 @@ class EventMonitor:
 
     def __init__(self, event_path: str):
         self._path = event_path
-        self._thread: Optional[threading.Thread] = None
+        self._thread: threading.Thread | None = None
         self._stop_event = threading.Event()
 
-        self.on_axis:   Optional[AxisCallback]   = None
-        self.on_button: Optional[ButtonCallback] = None
+        self.on_axis: AxisCallback | None = None
+        self.on_button: ButtonCallback | None = None
 
     # ------------------------------------------------------------------
 

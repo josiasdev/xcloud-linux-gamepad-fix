@@ -12,7 +12,9 @@ Usage::
         on_toggle_emulation=...,
     )
 """
+
 import gi
+
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -24,6 +26,7 @@ _INDICATOR_AVAILABLE = False
 try:
     gi.require_version("AppIndicator3", "0.1")
     from gi.repository import AppIndicator3
+
     _INDICATOR_AVAILABLE = True
 except (ValueError, ImportError):
     pass
@@ -39,9 +42,9 @@ class TrayIcon:
         get_running,
         on_toggle_emulation,
     ):
-        self._on_show            = on_show
-        self._on_quit            = on_quit
-        self._get_running        = get_running
+        self._on_show = on_show
+        self._on_quit = on_quit
+        self._get_running = get_running
         self._on_toggle_emulation = on_toggle_emulation
 
         self._menu = self._build_menu()
@@ -69,9 +72,7 @@ class TrayIcon:
     def update_emulation_item(self) -> None:
         """Refresh the emulation toggle label based on current state."""
         running = self._get_running()
-        self._emulation_item.set_label(
-            "Parar Emulação" if running else "Iniciar Emulação"
-        )
+        self._emulation_item.set_label("Parar Emulação" if running else "Iniciar Emulação")
 
     # ------------------------------------------------------------------
 

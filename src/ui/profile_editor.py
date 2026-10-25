@@ -1,5 +1,7 @@
 """Profile editor dialog – create or edit a Profile with GTK form fields."""
+
 import gi
+
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -25,8 +27,10 @@ class ProfileEditorDialog(Gtk.Dialog):
         )
         self.set_default_size(520, 320)
         self.add_buttons(
-            Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-            Gtk.STOCK_OK,     Gtk.ResponseType.OK,
+            Gtk.STOCK_CANCEL,
+            Gtk.ResponseType.CANCEL,
+            Gtk.STOCK_OK,
+            Gtk.ResponseType.OK,
         )
 
         box = self.get_content_area()

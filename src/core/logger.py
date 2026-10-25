@@ -9,11 +9,12 @@ Logs are written to:
   - stderr (WARNING+)
   - ~/.local/state/xcloud-gamepad/app.log (DEBUG+, rotating)
 """
+
 import logging
 import logging.handlers
 from pathlib import Path
 
-_LOG_DIR  = Path.home() / ".local" / "state" / "xcloud-gamepad"
+_LOG_DIR = Path.home() / ".local" / "state" / "xcloud-gamepad"
 _LOG_FILE = _LOG_DIR / "app.log"
 
 _configured = False
@@ -30,14 +31,14 @@ def _configure() -> None:
     root.setLevel(logging.DEBUG)
 
     # ── Rotating file handler (10 MB × 3 backups) ────────────────────
-    fh = logging.handlers.RotatingFileHandler(
-        _LOG_FILE, maxBytes=10 * 1024 * 1024, backupCount=3, encoding="utf-8"
-    )
+    fh = logging.handlers.RotatingFileHandler(_LOG_FILE, maxBytes=10 * 1024 * 1024, backupCount=3, encoding="utf-8")
     fh.setLevel(logging.DEBUG)
-    fh.setFormatter(logging.Formatter(
-        "%(asctime)s  %(levelname)-8s  %(name)s  %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    ))
+    fh.setFormatter(
+        logging.Formatter(
+            "%(asctime)s  %(levelname)-8s  %(name)s  %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
+    )
 
     # ── Console handler (WARNING+) ────────────────────────────────────
     ch = logging.StreamHandler()

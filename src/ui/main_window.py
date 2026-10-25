@@ -1,8 +1,11 @@
 """Main application window with three tabs: Emulation, Profiles, Test."""
+
 import gi
+
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, GLib, Gdk
-from typing import Optional, List, Any
+from typing import Any
+
+from gi.repository import GLib, Gtk
 
 from src.config.profile_repository import ProfileRepository
 from src.core.emulation import EmulationService
@@ -17,7 +20,6 @@ log = get_logger(__name__)
 
 
 class MainWindow(Gtk.Window):
-
     def __init__(self) -> None:
         super().__init__(title="XCloud Gamepad Fixer")
         self.set_default_size(640, 460)
@@ -29,10 +31,10 @@ class MainWindow(Gtk.Window):
         self.connect("delete-event", self._on_delete_event)
 
         # ── Services ──────────────────────────────────────────────────
-        self._repo      = ProfileRepository()
+        self._repo = ProfileRepository()
         self._emulation = EmulationService()
-        self._devices: List[InputDevice] = []
-        
+        self._devices: list[InputDevice] = []
+
         # Iniciar monitoramento de estado do daemon
         GLib.timeout_add_seconds(2, self._check_emulation_daemon)
 
@@ -73,7 +75,9 @@ class MainWindow(Gtk.Window):
 
         box.pack_start(
             Gtk.Label(label="<b>Controle Conectado:</b>", use_markup=True, xalign=0),
-            False, False, 0,
+            False,
+            False,
+            0,
         )
         self._device_combo = Gtk.ComboBoxText()
         self._device_combo.connect("changed", self._on_device_changed)
@@ -81,7 +85,9 @@ class MainWindow(Gtk.Window):
 
         box.pack_start(
             Gtk.Label(label="<b>Perfil de Mapeamento (Xbox 360):</b>", use_markup=True, xalign=0),
-            False, False, 0,
+            False,
+            False,
+            0,
         )
         self._profile_combo = Gtk.ComboBoxText()
         self._refresh_profile_combo()
@@ -99,13 +105,16 @@ class MainWindow(Gtk.Window):
 
         box.pack_start(
             Gtk.Label(label="<b>Status:</b>", use_markup=True, xalign=0),
-            False, False, 0,
+            False,
+            False,
+            0,
         )
         self._status_lbl = Gtk.Label(label="Pronto para iniciar.", xalign=0, wrap=True)
         box.pack_start(self._status_lbl, False, False, 0)
 
         # Log path hint
         from src.core.logger import _LOG_FILE
+
         hint = Gtk.Label(
             label=f"<small>Logs salvos em: {_LOG_FILE}</small>",
             use_markup=True,
@@ -140,7 +149,7 @@ class MainWindow(Gtk.Window):
     def _on_device_changed(self, _combo: Gtk.ComboBoxText) -> None:
         self._test_tab.set_device(self._selected_device())
 
-    def _selected_device(self) -> Optional[InputDevice]:
+    def _selected_device(self) -> InputDevice | None:
         idx = self._device_combo.get_active()
         if idx < 0 or idx >= len(self._devices):
             return None
@@ -157,7 +166,7 @@ class MainWindow(Gtk.Window):
         if self._profile_combo.get_model() and len(self._profile_combo.get_model()):
             self._profile_combo.set_active(0)
 
-    def _selected_profile(self) -> Optional[Profile]:
+    def _selected_profile(self) -> Profile | None:
         idx = self._profile_combo.get_active()
         profiles = self._repo.all()
         if idx < 0 or idx >= len(profiles):
@@ -183,7 +192,7 @@ class MainWindow(Gtk.Window):
         self._tray.update_emulation_item()
 
     def _start_emulation(self) -> None:
-        device  = self._selected_device()
+        device = self._selected_device()
         profile = self._selected_profile()
         if not device or not profile:
             self._status_lbl.set_text("Selecione um controle e um perfil.")

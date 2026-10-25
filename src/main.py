@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Entry point for XCloud Gamepad Fixer GUI."""
-import sys
+
 import os
+import sys
 
 # Ensure src/ siblings are importable when run directly from project root.
 _BASE = os.path.dirname(os.path.abspath(__file__))
@@ -10,6 +11,7 @@ if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
 
 import gi
+
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 

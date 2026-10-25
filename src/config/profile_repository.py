@@ -1,8 +1,7 @@
 """Profile persistence service – reads/writes ~/.config/xcloud-gamepad/profiles.json."""
+
 import json
-import os
 from pathlib import Path
-from typing import List
 
 from src.core.logger import get_logger
 from src.models.profile import DEFAULT_PROFILES, Profile
@@ -26,12 +25,12 @@ class ProfileRepository:
     # Public API
     # ------------------------------------------------------------------
 
-    def all(self) -> List[Profile]:
+    def all(self) -> list[Profile]:
         """Return all profiles from disk."""
         raw = self._load_raw()
         return [Profile.from_dict(d) for d in raw]
 
-    def save_all(self, profiles: List[Profile]) -> None:
+    def save_all(self, profiles: list[Profile]) -> None:
         """Persist the full list of profiles to disk."""
         self._write([p.to_dict() for p in profiles])
 
@@ -65,7 +64,7 @@ class ProfileRepository:
 
     def _load_raw(self) -> list:
         try:
-            with open(self._path, "r", encoding="utf-8") as f:
+            with open(self._path, encoding="utf-8") as f:
                 data = json.load(f)
             if not isinstance(data, list):
                 raise ValueError("profiles.json must be a list")

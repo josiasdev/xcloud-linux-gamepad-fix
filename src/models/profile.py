@@ -1,6 +1,7 @@
 """Data classes for gamepad profiles and devices."""
+
 from dataclasses import dataclass
-from typing import Any, Dict, List
+
 
 @dataclass
 class Profile:
@@ -9,7 +10,7 @@ class Profile:
     keymap: str
     axismap: str = "-y1=y1,-y2=y2"
 
-    def to_dict(self) -> Dict[str, str]:
+    def to_dict(self) -> dict[str, str]:
         return {
             "name": self.name,
             "absmap": self.absmap,
@@ -18,7 +19,7 @@ class Profile:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, str]) -> "Profile":
+    def from_dict(cls, data: dict[str, str]) -> "Profile":
         return cls(
             name=data["name"],
             absmap=data["absmap"],
@@ -26,10 +27,12 @@ class Profile:
             axismap=data.get("axismap", "-y1=y1,-y2=y2"),
         )
 
-    def to_xboxdrv_args(self) -> List[str]:
-        args: List[str] = [
-            "--evdev-absmap", self.absmap,
-            "--evdev-keymap", self.keymap,
+    def to_xboxdrv_args(self) -> list[str]:
+        args: list[str] = [
+            "--evdev-absmap",
+            self.absmap,
+            "--evdev-keymap",
+            self.keymap,
         ]
         if self.axismap:
             args += ["--axismap", self.axismap]
@@ -53,7 +56,7 @@ class InputDevice:
         return self.vendor_id.lower() == "054c"
 
 
-DEFAULT_PROFILES: List[Dict[str, str]] = [
+DEFAULT_PROFILES: list[dict[str, str]] = [
     {
         "name": "Sony DualShock 4 / DualSense (USB/Bluetooth)",
         "absmap": "ABS_X=x1,ABS_Y=y1,ABS_RX=x2,ABS_RY=y2,ABS_Z=lt,ABS_RZ=rt,ABS_HAT0X=dpad_x,ABS_HAT0Y=dpad_y",

@@ -1,7 +1,7 @@
 """Manages the xboxdrv subprocess lifecycle – fully decoupled from GTK."""
+
 import shutil
 import subprocess
-from typing import List, Optional
 
 from src.core.logger import get_logger
 from src.models.profile import InputDevice, Profile
@@ -13,7 +13,7 @@ class EmulationService:
     """Starts and stops xboxdrv as a child process."""
 
     def __init__(self):
-        self._process: Optional[subprocess.Popen] = None
+        self._process: subprocess.Popen | None = None
 
     # ------------------------------------------------------------------
     # Public API
@@ -41,7 +41,7 @@ class EmulationService:
         except Exception as e:
             self._process = None
             log.error("Failed to start xboxdrv: %s", e)
-            raise RuntimeError(f"Falha ao iniciar o processo de emulação: {e}")
+            raise RuntimeError(f"Falha ao iniciar o processo de emulação: {e}") from e
 
     def stop(self) -> None:
         """Terminate xboxdrv and kill any stray processes."""
@@ -67,7 +67,7 @@ class EmulationService:
     # ------------------------------------------------------------------
 
     @staticmethod
-    def _auth_cmd() -> List[str]:
+    def _auth_cmd() -> list[str]:
         if shutil.which("pkexec"):
             return ["pkexec"]
         return ["sudo"]

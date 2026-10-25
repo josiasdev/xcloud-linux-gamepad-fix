@@ -1,13 +1,16 @@
 """Input test tab – shows live axis/button state from evdev via a background thread."""
+
 import gi
+
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, GLib
+from gi.repository import GLib, Gtk
 
 from src.core.monitor import EventMonitor
 from src.models.profile import InputDevice
 
 try:
     import evdev
+
     _EVDEV_AVAIL = True
 except ImportError:
     _EVDEV_AVAIL = False
@@ -92,7 +95,8 @@ class TestTab(Gtk.Box):
         """)
         Gtk.StyleContext.add_provider_for_screen(
             self.get_screen() if self.get_screen() else self.get_display().get_default_screen(),
-            css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
+            css,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
         )
 
         self._device: InputDevice | None = None
@@ -126,15 +130,13 @@ class TestTab(Gtk.Box):
             return
 
         self._monitor = EventMonitor(self._device.event_path)
-        self._monitor.on_axis   = lambda c, v: GLib.idle_add(self._update_axis, c, v)
+        self._monitor.on_axis = lambda c, v: GLib.idle_add(self._update_axis, c, v)
         self._monitor.on_button = lambda c, v: GLib.idle_add(self._update_button, c, v)
 
         try:
             self._monitor.start()
             self._toggle_btn.set_label("Parar Teste")
-            self._status_lbl.set_markup(
-                f"<span foreground='green'><b>Capturando</b></span>  {self._device.name}"
-            )
+            self._status_lbl.set_markup(f"<span foreground='green'><b>Capturando</b></span>  {self._device.name}")
         except Exception as e:
             self._monitor = None
             self._status_lbl.set_text(f"Erro ao iniciar captura: {e}")
@@ -157,6 +159,7 @@ class TestTab(Gtk.Box):
             # For small-range axes (HAT, triggers 0-255)
             try:
                 import evdev
+
                 info = evdev.InputDevice(self._device.event_path).absinfo(code)
                 span = info.max - info.min
                 if span > 0:
