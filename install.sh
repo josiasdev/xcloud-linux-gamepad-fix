@@ -24,6 +24,7 @@ EOF
 echo "Configurando a regra do udev..."
 cat <<EOF > /etc/udev/rules.d/99-xcloud-gamepad.rules
 ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0810", ATTR{idProduct}=="0001", TAG+="systemd", ENV{SYSTEMD_WANTS}="xcloud-gamepad.service"
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="054c", ATTR{idProduct}=="05c4", TAG+="systemd", ENV{SYSTEMD_WANTS}="xcloud-gamepad.service"
 EOF
 
 echo "Recarregando daemons do sistema..."
