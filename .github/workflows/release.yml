@@ -29,28 +29,25 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libgirepository1.0-dev python3-gi gir1.2-gtk-3.0
 
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 pytest evdev
+          pip install ruff mypy pytest
 
-      - name: Lint with Flake8
-        run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. Complexity check
-          flake8 src tests --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
+      - name: Lint with Ruff
+        run: ruff check src tests
+
+      - name: Typecheck with Mypy
+        run: mypy src tests
 
       - name: Run Test Suite
-        run: |
-          pytest
+        run: pytest
 
   build-and-release:
     name: Build .deb & Publish Release
     needs: lint-and-test
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
