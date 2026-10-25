@@ -14,8 +14,12 @@ rm -f /etc/systemd/system/xcloud-gamepad.service
 echo "Removendo a regra do udev..."
 rm -f /etc/udev/rules.d/99-xcloud-gamepad.rules
 
-echo "Removendo o executavel..."
+echo "Removendo executáveis..."
 rm -f /usr/local/bin/xcloud-gamepad
+rm -f /usr/local/bin/xcloud-gamepad-gui
+
+echo "Removendo atalho de aplicativo..."
+rm -f /usr/share/applications/xcloud-gamepad-gui.desktop
 
 echo "Recarregando daemons do sistema..."
 systemctl daemon-reload

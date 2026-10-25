@@ -10,6 +10,14 @@ echo "Copiando script principal para /usr/local/bin..."
 cp xcloud-gamepad.sh /usr/local/bin/xcloud-gamepad
 chmod +x /usr/local/bin/xcloud-gamepad
 
+echo "Copiando interface gráfica para /usr/local/bin..."
+cp gui.py /usr/local/bin/xcloud-gamepad-gui
+chmod +x /usr/local/bin/xcloud-gamepad-gui
+
+echo "Instalando atalho no menu de aplicativos..."
+cp xcloud-gamepad-gui.desktop /usr/share/applications/
+chmod 644 /usr/share/applications/xcloud-gamepad-gui.desktop
+
 echo "Configurando o serviço do systemd..."
 cat <<EOF > /etc/systemd/system/xcloud-gamepad.service
 [Unit]
