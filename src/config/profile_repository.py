@@ -4,7 +4,10 @@ import os
 from pathlib import Path
 from typing import List
 
+from src.core.logger import get_logger
 from src.models.profile import DEFAULT_PROFILES, Profile
+
+log = get_logger(__name__)
 
 CONFIG_DIR = Path.home() / ".config" / "xcloud-gamepad"
 PROFILES_FILE = CONFIG_DIR / "profiles.json"
@@ -58,13 +61,18 @@ class ProfileRepository:
             if not isinstance(data, list):
                 raise ValueError("profiles.json must be a list")
             return data
-        except (json.JSONDecodeError, ValueError, KeyError):
+        except (json.JSONDecodeError, ValueError, KeyError) as e:
+            log.error(f"Failed to load profiles: {e}. Falling back to defaults.")
             self._write_defaults()
             return list(DEFAULT_PROFILES)
 
     def _write_defaults(self) -> None:
+        log.info("Resetting profiles to defaults.")
         self._write(list(DEFAULT_PROFILES))
 
     def _write(self, data: list) -> None:
-        with open(self._path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+        try:
+            with open(self._path, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            log.error(f"Failed to save profiles: {e}")
