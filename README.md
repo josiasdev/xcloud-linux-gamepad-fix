@@ -1,5 +1,7 @@
 # XCloud Linux Gamepad Fix
 
+![CI](https://github.com/josiasdev/xcloud-linux-gamepad-fix/actions/workflows/release.yml/badge.svg)
+
 Solução completa com serviço em segundo plano e interface gráfica em GTK 3 para fazer controles USB e Bluetooth (Sony DualShock 4, DualSense e modelos genéricos) funcionarem mapeados como Xbox 360 no Xbox Cloud Gaming (XCloud) no Linux.
 
 ## O Problema
