@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=XCloud Gamepad Fixer
 Comment=Mapeia controles USB e Bluetooth como Xbox 360 para o XCloud
-Exec=python3 /usr/local/bin/xcloud-gamepad-gui
+Exec=/usr/local/bin/xcloud-gamepad-gui
 Icon=input-gaming
 Terminal=false
 Type=Application

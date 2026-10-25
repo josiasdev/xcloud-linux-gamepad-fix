@@ -6,7 +6,9 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-echo "Parando e removendo o servico do systemd..."
+INSTALL_DIR="/opt/xcloud-gamepad-fix"
+
+echo "Parando e removendo o serviço do systemd..."
 systemctl stop xcloud-gamepad.service 2>/dev/null || true
 systemctl disable xcloud-gamepad.service 2>/dev/null || true
 rm -f /etc/systemd/system/xcloud-gamepad.service
@@ -18,6 +20,9 @@ echo "Removendo executáveis..."
 rm -f /usr/local/bin/xcloud-gamepad
 rm -f /usr/local/bin/xcloud-gamepad-gui
 
+echo "Removendo aplicação instalada..."
+rm -rf "$INSTALL_DIR"
+
 echo "Removendo atalho de aplicativo..."
 rm -f /usr/share/applications/xcloud-gamepad-gui.desktop
 
@@ -25,4 +30,4 @@ echo "Recarregando daemons do sistema..."
 systemctl daemon-reload
 udevadm control --reload-rules
 
-echo "Desinstalacao concluida. O sistema voltou ao estado original."
+echo "Desinstalação concluída. O sistema voltou ao estado original."

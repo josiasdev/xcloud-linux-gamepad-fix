@@ -6,12 +6,22 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-echo "Copiando script principal para /usr/local/bin..."
+INSTALL_DIR="/opt/xcloud-gamepad-fix"
+
+echo "Copiando aplicação para $INSTALL_DIR..."
+rm -rf "$INSTALL_DIR"
+mkdir -p "$INSTALL_DIR"
+cp -r src/ "$INSTALL_DIR/src"
+
+echo "Copiando script de linha de comando para /usr/local/bin..."
 cp xcloud-gamepad.sh /usr/local/bin/xcloud-gamepad
 chmod +x /usr/local/bin/xcloud-gamepad
 
-echo "Copiando interface gráfica para /usr/local/bin..."
-cp gui.py /usr/local/bin/xcloud-gamepad-gui
+echo "Criando launcher executável para a interface gráfica..."
+cat <<EOF > /usr/local/bin/xcloud-gamepad-gui
+#!/bin/bash
+exec python3 $INSTALL_DIR/src/main.py "\$@"
+EOF
 chmod +x /usr/local/bin/xcloud-gamepad-gui
 
 echo "Instalando atalho no menu de aplicativos..."
@@ -40,5 +50,8 @@ systemctl daemon-reload
 udevadm control --reload-rules
 udevadm trigger
 
+echo ""
 echo "Instalação concluída com sucesso!"
-echo "A partir de agora, o script rodará automaticamente sempre que o controle for conectado."
+echo "Interface gráfica: xcloud-gamepad-gui"
+echo "Linha de comando:  sudo xcloud-gamepad"
+echo "A partir de agora, o serviço inicia automaticamente ao conectar o controle via USB."
