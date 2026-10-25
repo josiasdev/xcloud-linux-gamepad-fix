@@ -2,7 +2,10 @@
 import os
 from typing import List
 
+from src.core.logger import get_logger
 from src.models.profile import InputDevice
+
+log = get_logger(__name__)
 
 _PROC_DEVICES = "/proc/bus/input/devices"
 _IGNORED_SUFFIXES = ("Motion Sensors", "Touchpad")
@@ -15,6 +18,7 @@ def list_controllers() -> List[InputDevice]:
 
     devices: List[InputDevice] = []
     current: dict = {}
+    log.debug("Scanning %s for joystick devices", _PROC_DEVICES)
 
     with open(_PROC_DEVICES, "r") as f:
         for raw in f:

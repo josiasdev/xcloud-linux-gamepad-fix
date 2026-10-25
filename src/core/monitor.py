@@ -1,7 +1,10 @@
-"""Event monitor – reads raw evdev events in a background thread and dispatches
-axis/button updates via caller-supplied callbacks (GLib.idle_add friendly)."""
+"""Event monitor – reads raw evdev events in a background thread."""
 import threading
 from typing import Callable, Optional
+
+from src.core.logger import get_logger
+
+log = get_logger(__name__)
 
 try:
     import evdev
@@ -60,7 +63,9 @@ class EventMonitor:
         try:
             device = evdev.InputDevice(self._path)
             device.grab()
-        except Exception:
+            log.info("EventMonitor: grabbed %s", self._path)
+        except Exception as exc:
+            log.error("EventMonitor: could not grab %s – %s", self._path, exc)
             return
 
         try:
@@ -73,10 +78,11 @@ class EventMonitor:
 
                 elif event.type == evdev.ecodes.EV_KEY and self.on_button:
                     self.on_button(event.code, bool(event.value))
-        except Exception:
-            pass
+        except Exception as exc:
+            log.warning("EventMonitor read error: %s", exc)
         finally:
             try:
                 device.ungrab()
+                log.info("EventMonitor: released %s", self._path)
             except Exception:
                 pass

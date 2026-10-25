@@ -1,0 +1,43 @@
+# Maintainer: Josias <josias@users.noreply.github.com>
+pkgname=xcloud-gamepad-fix
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Controller detection and mapping fixer for Xbox Cloud Gaming on Linux"
+arch=('any')
+url="https://github.com/josiasdev/xcloud-linux-gamepad-fix"
+license=('MIT')
+depends=(
+    'python'
+    'python-gobject'
+    'python-evdev'
+    'gtk3'
+    'xboxdrv'
+)
+optdepends=(
+    'libappindicator-gtk3: System tray AppIndicator support'
+)
+source=("$pkgname-$pkgver.tar.gz::https://github.com/josiasdev/$pkgname/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+package() {
+    cd "$srcdir/$pkgname-$pkgver"
+
+    # 1. Install application source in /opt
+    install -d "$pkgdir/opt/$pkgname"
+    cp -r src "$pkgdir/opt/$pkgname/"
+    install -m 755 xcloud-gamepad.sh "$pkgdir/opt/$pkgname/"
+
+    # 2. Binary wrapper in /usr/bin
+    install -d "$pkgdir/usr/bin"
+    cat <<'EOF' > "$pkgdir/usr/bin/xcloud-gamepad-gui"
+#!/bin/sh
+exec python3 /opt/xcloud-gamepad-fix/src/main.py "$@"
+EOF
+    chmod 755 "$pkgdir/usr/bin/xcloud-gamepad-gui"
+
+    # 3. Desktop entry
+    install -Dm 644 xcloud-gamepad-gui.desktop "$pkgdir/usr/share/applications/xcloud-gamepad-gui.desktop"
+
+    # 4. License
+    install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
