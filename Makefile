@@ -9,7 +9,14 @@ $(VENV)/bin/python:
 	python3 -m venv $(VENV)
 
 install-deps: $(VENV)/bin/python
-	$(BIN)/pip install --quiet --upgrade pip ruff mypy pytest
+	$(BIN)/pip install --quiet --upgrade pip ruff mypy pytest pre-commit commitizen
+
+setup-hooks:
+	$(BIN)/pre-commit install
+	$(BIN)/pre-commit install --hook-type commit-msg
+
+run-hooks:
+	$(BIN)/pre-commit run --all-files
 
 run:
 	python3 src/main.py

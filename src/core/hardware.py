@@ -36,14 +36,16 @@ def list_controllers() -> List[InputDevice]:
                 handlers = line.split("=")[1].split()
                 has_js = any(h.startswith("js") for h in handlers)
                 ev = next((h for h in handlers if h.startswith("event")), None)
-                name = current.get("name", "")
-                if has_js and ev and not any(name.endswith(s) for s in _IGNORED_SUFFIXES):
+                name = current.get("name")
+                if name and has_js and ev and not any(name.endswith(s) for s in _IGNORED_SUFFIXES):
                     devices.append(InputDevice(
                         name=name,
                         event_path=f"/dev/input/{ev}",
                         vendor_id=current.get("vendor", ""),
                         product_id=current.get("product", ""),
                     ))
+                elif has_js and ev:
+                    log.warning("Skipping device with unexpected format: %s", name)
             elif not line:
                 current = {}
 

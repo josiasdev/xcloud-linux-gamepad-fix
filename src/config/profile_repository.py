@@ -36,19 +36,28 @@ class ProfileRepository:
         self._write([p.to_dict() for p in profiles])
 
     def add(self, profile: Profile) -> None:
-        profiles = self.all()
-        profiles.append(profile)
-        self.save_all(profiles)
+        try:
+            profiles = self.all()
+            profiles.append(profile)
+            self.save_all(profiles)
+        except PermissionError as e:
+            log.error(f"Permission denied when adding profile: {e}")
 
     def update(self, index: int, profile: Profile) -> None:
-        profiles = self.all()
-        profiles[index] = profile
-        self.save_all(profiles)
+        try:
+            profiles = self.all()
+            profiles[index] = profile
+            self.save_all(profiles)
+        except PermissionError as e:
+            log.error(f"Permission denied when updating profile: {e}")
 
     def remove(self, index: int) -> None:
-        profiles = self.all()
-        del profiles[index]
-        self.save_all(profiles)
+        try:
+            profiles = self.all()
+            del profiles[index]
+            self.save_all(profiles)
+        except PermissionError as e:
+            log.error(f"Permission denied when removing profile: {e}")
 
     # ------------------------------------------------------------------
     # Private helpers

@@ -35,7 +35,21 @@ Requisitos: `make`, `python3`.
 
 ```bash
 make install-deps
-make run      # Executa a aplicação
-make lint     # Ruff + Mypy
-make test     # Pytest
+make setup-hooks # Configura os hooks do pre-commit e commitizen
+make run         # Executa a aplicação
+make lint        # Ruff + Mypy
+make test        # Pytest
 ```
+
+## 🤝 Como Contribuir
+
+Este projeto segue um fluxo rigoroso de **Git Flow** e **Conventional Commits**.
+
+1. Leia o [CONTRIBUTING.md](CONTRIBUTING.md).
+2. Toda nova funcionalidade deve primeiro ser discutida em uma **Issue** antes de abrir um **Pull Request**.
+3. Se você é um desenvolvedor utilizando assistentes de IA, consulte nossos manuais de governança:
+   - [CLAUDE.md](CLAUDE.md): Regras de Git e Segurança.
+   - [AGENTS.md](AGENTS.md): Contexto Arquitetural para IAs.
+
+---
+Toda nova funcionalidade deve primeiro ser discutida em uma Issue antes de abrir um Pull Request.

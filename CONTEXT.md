@@ -43,9 +43,11 @@ Linguagem: Python 3.10+
 Interface Grafica: GTK 3 via PyGObject (python3-gi, gir1.2-gtk-3.0)
 Bandeja do Sistema: gir1.2-appindicator3-0.1 (com fallback para Gtk.StatusIcon)
 Captura de Eventos: python3-evdev
-Backend de Emulacao: xboxdrv
+Backend de Emulação: xboxdrv
 Testes Automatizados: pytest
 Empacotamento: dpkg-deb e pacman/makepkg
+Governança e Qualidade: pre-commit, ruff, mypy, commitizen (Conventional Commits)
+
 
 ## Comandos Principais
 Executar a interface grafica localmente:

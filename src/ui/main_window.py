@@ -21,6 +21,7 @@ class MainWindow(Gtk.Window):
     def __init__(self) -> None:
         super().__init__(title="XCloud Gamepad Fixer")
         self.set_default_size(640, 460)
+        self.set_resizable(True)  # Permitir redimensionamento
         self.set_border_width(0)
         self.set_position(Gtk.WindowPosition.CENTER)
 
@@ -31,6 +32,9 @@ class MainWindow(Gtk.Window):
         self._repo      = ProfileRepository()
         self._emulation = EmulationService()
         self._devices: List[InputDevice] = []
+        
+        # Iniciar monitoramento de estado do daemon
+        GLib.timeout_add_seconds(2, self._check_emulation_daemon)
 
         # ── Notebook (tabs) ───────────────────────────────────────────
         notebook = Gtk.Notebook()
@@ -163,6 +167,13 @@ class MainWindow(Gtk.Window):
     # ==================================================================
     # Emulation toggle
     # ==================================================================
+
+    def _check_emulation_daemon(self) -> bool:
+        if self._emulation.is_running is False and self._toggle_btn.get_label() == "Parar Emulação":
+            self._stop_emulation()
+            self._status_lbl.set_text("Erro: O processo de emulação encerrou inesperadamente.")
+            self._tray.update_emulation_item()
+        return True
 
     def _on_toggle_emulation(self) -> None:
         if self._emulation.is_running:

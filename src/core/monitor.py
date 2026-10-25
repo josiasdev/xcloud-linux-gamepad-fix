@@ -78,8 +78,12 @@ class EventMonitor:
 
                 elif event.type == evdev.ecodes.EV_KEY and self.on_button:
                     self.on_button(event.code, bool(event.value))
-        except Exception as exc:
+        except (OSError, Exception) as exc:
             log.warning("EventMonitor read error: %s", exc)
+            # Notificar para parar a captura se houver erro crítico
+            if self.on_button:
+                # Disparar evento de falha para a UI resetar (0=false)
+                self.on_button(0, False)
         finally:
             try:
                 device.ungrab()

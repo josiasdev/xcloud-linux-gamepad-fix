@@ -1,20 +1,26 @@
 ---
 name: Bug Report
-about: Criar um relatório para nos ajudar a melhorar
-title: '[BUG] '
+about: Reportar um erro no emulador ou interface
 labels: bug
 ---
 
-## Descrição
-<!-- Descreva o problema claramente -->
+## 🐛 Descrição do Bug
+Uma descrição clara e concisa do que aconteceu.
 
-## Passos para reproduzir
-1. ...
-2. ...
+## 🛠 Passos para Reproduzir
+1. 
+2. 
+3. 
 
-## Comportamento esperado
-<!-- O que deveria acontecer -->
+## 🎯 Comportamento Esperado
+O que você esperava que acontecesse?
 
-## Ambiente
-- Distribuição:
-- Versão do app:
+## 🖥 Ambiente
+- **Distribuição Linux:** [ex: Ubuntu 22.04, Arch Linux]
+- **Modelo do Controle:** [ex: DualShock 4, Genérico USB]
+- **Tipo de Conexão:** [USB ou Bluetooth]
+- **Versão do App:** 
+
+## 📝 Logs Adicionais
+Se aplicável, anexe o conteúdo do arquivo de log: `~/.local/state/xcloud-gamepad/app.log`
+<!-- Dica: Use blocos de código para colar os logs -->

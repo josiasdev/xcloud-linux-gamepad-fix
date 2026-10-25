@@ -6,13 +6,14 @@ Obrigado por se interessar em melhorar este projeto!
 
 1. Faça o Fork do repositório.
 2. Crie sua feature branch: `git checkout -b feat/nova-melhoria`.
-3. Configure o ambiente local:
+3. Configure o ambiente local e os hooks de segurança:
    ```bash
    make install-deps
+   make setup-hooks
    ```
-4. Verifique a qualidade do código:
+4. Verifique a qualidade do código (será executado automaticamente no commit):
    ```bash
-   make lint
+   make run-hooks
    make test
    ```
 5. Envie seu Pull Request.

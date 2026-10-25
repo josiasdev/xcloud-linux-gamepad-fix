@@ -1,7 +1,7 @@
 """Manages the xboxdrv subprocess lifecycle – fully decoupled from GTK."""
 import shutil
 import subprocess
-from typing import Optional
+from typing import List, Optional
 
 from src.core.logger import get_logger
 from src.models.profile import InputDevice, Profile
@@ -32,11 +32,16 @@ class EmulationService:
         cmd = auth + ["xboxdrv", "--evdev", device.event_path] + profile.to_xboxdrv_args()
         log.info("Starting xboxdrv: device=%s profile='%s'", device.event_path, profile.name)
         log.debug("Command: %s", cmd)
-        self._process = subprocess.Popen(
-            cmd,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.PIPE,
-        )
+        try:
+            self._process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.PIPE,
+            )
+        except Exception as e:
+            self._process = None
+            log.error("Failed to start xboxdrv: %s", e)
+            raise RuntimeError(f"Falha ao iniciar o processo de emulação: {e}")
 
     def stop(self) -> None:
         """Terminate xboxdrv and kill any stray processes."""
